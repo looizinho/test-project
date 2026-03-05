@@ -1,4 +1,4 @@
-# Aplicastivo
+# Aplicativo
 
 Aplicastivo é um app de lista de tarefas (To-Do List) feito com React + Vite, com foco em simplicidade, uso offline e persistência local.
 
