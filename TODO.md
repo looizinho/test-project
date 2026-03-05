@@ -23,7 +23,7 @@
 - ✅ `src/components/TodoApp.jsx` → componente principal
 - ✅ `src/components/TodoForm.jsx` → formulário de nova tarefa
 - ✅ `src/components/TodoList.jsx` → lista com edit/delete/toggle
-- ✅ `src/utils/jsonStorage.js` → persistência via IndexedDB + export JSON
+- ✅ `src/utils/jsonStorage.js` → persistência via API local em arquivo JSON
 
 ## 📝 Próximo Passo: Instalar dependências e rodar
 
@@ -36,7 +36,7 @@ pnpm run dev
 ## 🔮 Próximos passos
 - [ ] Testar o dev server (Vite)
 - [ ] Verificar PWA (manifest + service worker)
-- [ ] Testar persistência (IndexedDB + export JSON)
+- [ ] Testar persistência (`data/tasks.json` + export JSON)
 - [ ] Ajustar componentes se necessário
 - [ ] Otimizar tamanho dos ícones e assets (falta criar os PNGs)
 

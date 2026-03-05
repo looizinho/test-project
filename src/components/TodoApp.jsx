@@ -10,9 +10,9 @@ const TodoApp = () => {
   const [showInstall, setShowInstall] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
 
-  const loadFromStorage = useCallback(() => {
+  const loadFromStorage = useCallback(async () => {
     try {
-      const stored = loadTasks();
+      const stored = await loadTasks();
       if (stored && Array.isArray(stored)) {
         setTasks(stored);
       }
@@ -30,16 +30,17 @@ const TodoApp = () => {
         .catch(err => console.warn('[SW] Falha:', err));
     }
 
-    window.addEventListener('beforeinstallprompt', (e) => {
+    const onBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setShowInstall(true);
-    });
+    };
+    window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
 
     const closeExportMenu = () => setShowExportMenu(false);
     window.addEventListener('click', closeExportMenu);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', () => {});
+      window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
       window.removeEventListener('click', closeExportMenu);
     };
   }, [loadFromStorage]);
@@ -48,6 +49,14 @@ const TodoApp = () => {
     setNotification(message);
     setTimeout(() => setNotification(null), 3000);
   }, []);
+
+  const persistTasks = useCallback(async (updatedTasks) => {
+    try {
+      await saveTasks(updatedTasks);
+    } catch (err) {
+      showNotification('Erro ao persistir dados em JSON.');
+    }
+  }, [showNotification]);
 
   const addTask = useCallback((text) => {
     const newTask = {
@@ -58,38 +67,38 @@ const TodoApp = () => {
     };
     const updatedTasks = [newTask, ...tasks];
     setTasks(updatedTasks);
-    saveTasks(updatedTasks);
+    persistTasks(updatedTasks);
     showNotification('Tarefa adicionada!');
-  }, [tasks, showNotification]);
+  }, [tasks, showNotification, persistTasks]);
 
   const toggleTask = useCallback((id) => {
     const updatedTasks = tasks.map(task =>
       task.id === id ? { ...task, completed: !task.completed } : task
     );
     setTasks(updatedTasks);
-    saveTasks(updatedTasks);
-  }, [tasks]);
+    persistTasks(updatedTasks);
+  }, [tasks, persistTasks]);
 
   const editTask = useCallback((id, newText) => {
     const updatedTasks = tasks.map(task =>
       task.id === id ? { ...task, text: newText.trim() } : task
     );
     setTasks(updatedTasks);
-    saveTasks(updatedTasks);
+    persistTasks(updatedTasks);
     showNotification('Tarefa atualizada!');
-  }, [tasks, showNotification]);
+  }, [tasks, showNotification, persistTasks]);
 
   const deleteTask = useCallback((id) => {
     const updatedTasks = tasks.filter(task => task.id !== id);
     setTasks(updatedTasks);
-    saveTasks(updatedTasks);
+    persistTasks(updatedTasks);
     showNotification('Tarefa removida!');
-  }, [tasks, showNotification]);
+  }, [tasks, showNotification, persistTasks]);
 
   const clearAll = useCallback(() => {
     if (window.confirm('Tem certeza que deseja apagar todas as tarefas?')) {
       setTasks([]);
-      deleteTasks();
+      deleteTasks().catch(() => showNotification('Erro ao apagar dados em JSON.'));
       showNotification('Todas as tarefas foram removidas.');
     }
   }, [showNotification]);

@@ -5,7 +5,7 @@ Aplicastivo é um app de lista de tarefas (To-Do List) feito com React + Vite, c
 ## Funcionalidades
 - Criar, editar, concluir e remover tarefas
 - Filtrar tarefas por status: todas, pendentes e concluídas
-- Armazenamento local com IndexedDB
+- Persistência local em arquivo JSON (`data/tasks.json`) via API local (`/api/tasks`)
 - Exportação de tarefas em JSON e Markdown
 - Suporte a PWA (manifest + service worker)
 - Interface responsiva com tema claro/escuro
@@ -14,7 +14,7 @@ Aplicastivo é um app de lista de tarefas (To-Do List) feito com React + Vite, c
 - React 18
 - Vite 5
 - JavaScript (ESM)
-- IndexedDB
+- API local no Vite (middleware Node)
 - Service Worker
 
 ## Como executar
@@ -44,7 +44,8 @@ pnpm run preview
 
 ## Estrutura principal
 - `src/components/` componentes da interface (formulário, lista e app principal)
-- `src/utils/jsonStorage.js` persistência das tarefas
+- `src/utils/jsonStorage.js` consumo da API local de persistência
+- `data/tasks.json` base local de tarefas
 - `public/manifest.json` configuração PWA
 - `public/sw.js` service worker
 
