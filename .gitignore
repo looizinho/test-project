@@ -1,6 +1,6 @@
 # Dependencies
 node_modules/
-pnpm-lock.yaml
+pnpm-workspace.yaml
 
 # Build outputs
 dist/
@@ -17,4 +17,3 @@ build/
 # Environment
 .env
 .env.local
-test-project/
